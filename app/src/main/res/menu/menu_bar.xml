@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:icon="@drawable/home_icon"
+        android:title="Home"/>
+
+    <item
+        android:id="@+id/leaderboard"
+        android:icon="@drawable/leaderboard_icon"
+        android:title="Leaderboard"/>
+
+    <item
+        android:id="@+id/worksheet"
+        android:icon="@drawable/worksheet_icon"
+        android:title="Worksheet"/>
+
+    <item
+        android:id="@+id/performance"
+        android:icon="@drawable/performance_icon"
+        android:title="Performance"/>
+
+
+</menu>

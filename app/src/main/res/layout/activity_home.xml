@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home">
+
+    <Button
+        android:id="@+id/checkInBtn45"
+        android:layout_width="500px"
+        android:layout_height="60dp"
+        android:layout_below="@id/longitude"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#4CAF50"
+        android:text="Check in"
+        android:textSize="50px"
+        android:layout_marginTop="42dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/latitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="Latitude"
+        android:layout_marginTop="42dp"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/longitude"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="42dp"
+        android:text="Longitude"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:layout_below="@id/latitude" />
+
+</RelativeLayout>
