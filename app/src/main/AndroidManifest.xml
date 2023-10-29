@@ -21,9 +21,6 @@
         android:usesCleartextTraffic="true"
         android:networkSecurityConfig="@xml/network_security_config">
         <activity
-            android:name=".Home2"
-            android:exported="false" />
-        <activity
             android:name=".Home"
             android:exported="false" />
         <activity

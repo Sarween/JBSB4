@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
 
         loginBtn.setOnClickListener() {
 //            val intent = Intent(this, Dashboard::class.java)
-            val intent = Intent(this, Home::class.java)
+            val intent = Intent(this, Dashboard::class.java)
             startActivity(intent)
         }
     }

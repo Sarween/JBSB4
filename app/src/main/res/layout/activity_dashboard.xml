@@ -6,22 +6,243 @@
     android:layout_height="match_parent"
     tools:context=".Dashboard">
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_navbar"
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="@drawable/navbar_color"
-        app:menu="@menu/menu_bar"
-        app:itemTextColor="@drawable/icon_selector"
-        app:itemIconTint="@drawable/icon_selector"/>
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/header"
+        android:background="@color/my_secondary"
+        >
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/jbsb"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"/>
+        </FrameLayout>
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/bottom_navbar">
-    </FrameLayout>
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Dashboard"
+            android:textColor="@color/my_primary"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <!-- Row 1 -->
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="175dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:id="@+id/cardView"
+        android:layout_below="@+id/header"
+        >
+        <!-- Card 1 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/jobCard"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/job"
+                    android:text="Attendance"
+                    android:textSize="20sp"
+                    android:textColor="@color/my_secondary"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jobImg"
+                    />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:id="@+id/jobImg"
+                    android:src="@drawable/jbsb"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <!-- Card 2 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/jobCard2"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/job2"
+                    android:text="Worksheet"
+                    android:textSize="20sp"
+                    android:textColor="@color/my_secondary"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jobImg2"
+                    />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:id="@+id/jobImg2"
+                    android:src="@drawable/jbsb"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+    <!-- Row 2 -->
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="175dp"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:id="@+id/cardView2"
+        android:layout_below="@+id/cardView"
+        >
+        <!-- Card 3 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/jobCard3"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/job3"
+                    android:text="Leaderboard"
+                    android:textSize="20sp"
+                    android:textColor="@color/my_secondary"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jobImg3"
+                    />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:id="@+id/jobImg3"
+                    android:src="@drawable/jbsb"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card 4 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:id="@+id/jobCard4"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            app:cardElevation="20dp"
+            app:cardCornerRadius="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/job4"
+                    android:text="Performance"
+                    android:textSize="20sp"
+                    android:textColor="@color/my_secondary"
+                    android:fontFamily="@font/poppins_semibold"
+                    android:layout_marginTop="10dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_below="@+id/jobImg4"
+                    />
+
+                <ImageView
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:id="@+id/jobImg4"
+                    android:src="@drawable/jbsb"
+                    android:layout_marginTop="15dp"
+                    android:layout_centerHorizontal="true"/>
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+
+<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+<!--        android:id="@+id/bottom_navbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_alignParentBottom="true"-->
+<!--        android:background="@drawable/navbar_color"-->
+<!--        app:menu="@menu/menu_bar"-->
+<!--        app:itemTextColor="@drawable/icon_selector"-->
+<!--        app:itemIconTint="@drawable/icon_selector"/>-->
+
+<!--    <FrameLayout-->
+<!--        android:id="@+id/fragment_container"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:layout_above="@id/bottom_navbar">-->
+<!--    </FrameLayout>-->
 
 
 </RelativeLayout>
