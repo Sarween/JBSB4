@@ -18,6 +18,18 @@
         android:layout_marginTop="42dp"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/getShift"
+        android:layout_width="500px"
+        android:layout_height="60dp"
+        android:layout_below="@id/checkInBtn45"
+        android:layout_centerInParent="true"
+        android:backgroundTint="#4CAF50"
+        android:text="Get Shift"
+        android:textSize="50px"
+        android:layout_marginTop="42dp"
+        android:textStyle="bold" />
+
     <TextView
         android:id="@+id/latitude"
         android:layout_width="match_parent"

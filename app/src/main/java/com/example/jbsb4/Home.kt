@@ -1,10 +1,12 @@
 package com.example.jbsb4
 
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import com.example.jbsb4.Model.Shift
 import com.example.jbsb4.remote.APIInterface
 import com.example.jbsb4.remote.RetrofitClient
@@ -39,6 +41,24 @@ class Home : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         iMyAPI = RetrofitClient.getInstance().create(APIInterface::class.java)
+        val shiftApi = RetrofitClient.getInstance().create(APIInterface::class.java)
+//            val response = shiftApi.getShift()
+
+
+        val shiftBtn: Button = findViewById(R.id.getShift)
+
+        shiftBtn.setOnClickListener {
+            GlobalScope.launch(Dispatchers.IO) {
+                val response = shiftApi.getShift()
+                if (response.isSuccessful) {
+                    for(shift in response.body()!!){
+                        Log.i(TAG, "getShift: ${shift.recruitmentID}")
+                    }
+                }
+            }
+        }
+        // launching a new coroutine
+
 
         val checkInButton: Button = findViewById(R.id.checkInBtn45)
         val lat: TextView = findViewById(R.id.latitude)
@@ -51,18 +71,24 @@ class Home : AppCompatActivity() {
         var recruitID=1;
         var stuID=1;
         checkInButton.setOnClickListener {
-            val shiftApi = RetrofitClient.getInstance().create(APIInterface::class.java)
-//            val response = shiftApi.getShift()
-
-            // launching a new coroutine
-            GlobalScope.launch(Dispatchers.IO) {
-                val response = shiftApi.getShift()
-                if (response.isSuccessful) {
-                    for(shift in response.body()!!){
-                        Log.i(TAG, "getShift: ${shift.recruitmentID}")
+                        // Check if the user has granted the app permission to access their location.
+            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // Request the permission from the user.
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 100)
+            } else {
+                // Get the user's location.
+                fusedLocationClient.getLastLocation()
+                    .addOnSuccessListener { location ->
+                        // If the location is not null, display it in a text view.
+                        if (location != null) {
+                            println(location.latitude)
+                            println(location.longitude)
+                            val textView: TextView = findViewById(R.id.longitude)
+                            textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
+                        }
                     }
-                }
             }
+
 
 
 
@@ -128,29 +154,15 @@ class Home : AppCompatActivity() {
 //            // Update the UI with the response body.
 //            println(body)
 
-//            // Check if the user has granted the app permission to access their location.
-//            if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-//                // Request the permission from the user.
-//                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION), 100)
-//            } else {
-//                // Get the user's location.
-//                fusedLocationClient.getLastLocation()
-//                    .addOnSuccessListener { location ->
-//                        // If the location is not null, display it in a text view.
-//                        if (location != null) {
-//                            println(location.latitude)
-//                            println(location.longitude)
-//                            val textView: TextView = findViewById(R.id.longitude)
-//                            textView.text = "Latitude: ${location.latitude}, Longitude: ${location.longitude}"
-//                        }
-//                    }
-//            }
+
 
 
         }
 
 
     }
+
+
 
 //    private class MyAsyncTask : AsyncTask<Void, Void, String>() {
 //
