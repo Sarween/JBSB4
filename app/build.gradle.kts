@@ -94,6 +94,10 @@ dependencies {
     implementation("io.reactivex.rxjava2:rxandroid:2.0.1")
     implementation("io.reactivex.rxjava2:rxjava:2.1.7")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
+    // PDF
+    implementation("com.github.barteksc:android-pdf-viewer:3.2.0-beta.1")
+    // Graph
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 //    implementation("com.google.android.gms:play-services-maps:18.1.0")
 //    implementation("com.google.android.gms:play-services-location:21.0.1")
 

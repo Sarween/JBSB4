@@ -10,6 +10,10 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // For PDF
+        gradlePluginPortal()
+        maven { url = uri("https://jitpack.io") }
+
     }
 }
 

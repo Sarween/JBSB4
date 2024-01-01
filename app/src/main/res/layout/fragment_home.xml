@@ -63,24 +63,24 @@
         android:layout_below="@id/header"
         android:id="@+id/buttons"
         >
-        <Button
-            android:id="@+id/checkInBtn"
-            android:layout_width="250px"
-            android:layout_height="50dp"
-            android:text="Check in"
-            android:textSize="10dp"
-            android:textStyle="bold"
-            android:backgroundTint="#4CAF50"
-            />
+<!--        <Button-->
+<!--            android:id="@+id/checkInBtn"-->
+<!--            android:layout_width="250px"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:text="Check in"-->
+<!--            android:textSize="10dp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:backgroundTint="#4CAF50"-->
+<!--            />-->
 
-        <Button
-            android:id="@+id/checkOutBtn"
-            android:layout_width="250px"
-            android:layout_height="50dp"
-            android:backgroundTint="#E91E63"
-            android:text="Check out"
-            android:textSize="10dp"
-            android:textStyle="bold" />
+<!--        <Button-->
+<!--            android:id="@+id/checkOutBtn"-->
+<!--            android:layout_width="250px"-->
+<!--            android:layout_height="50dp"-->
+<!--            android:backgroundTint="#E91E63"-->
+<!--            android:text="Check out"-->
+<!--            android:textSize="10dp"-->
+<!--            android:textStyle="bold" />-->
 
     </LinearLayout>
 

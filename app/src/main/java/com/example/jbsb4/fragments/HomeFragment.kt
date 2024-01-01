@@ -115,35 +115,35 @@ class HomeFragment : Fragment() {
 
 //        requestLocationPermission()
 
-        // This part was commented
-        homeBinding.checkInBtn.setOnClickListener {
-            println("checkInBtn1")
-
-            println("Q start")
-            locationChecker(getLocation())
-            println("Q end")
-//            requestLocationUpdates()
-            println("checkInBtn2")
-
-        }
-
-        homeBinding.checkOutBtn.setOnClickListener {
-            checkOutTime = System.currentTimeMillis()
-            val duration = checkOutTime - checkInTime
-            println("duration : $duration")
-            val totalSeconds = duration / 1000
-            val hours = totalSeconds / 3600
-            val minutes = (totalSeconds % 3600) / 60
-            val seconds = totalSeconds % 60
-
-            println("Hours $hours and Minutes $minutes Seconds $seconds" )
-            val durationToast = "Hours $hours and Minutes $minutes Seconds $seconds"
-            // Display the duration to the user if needed
-//            insertWorkRecord(WorkRecord(checkInTime, checkOutTime, duration))
-            context?.let {
-                Toast.makeText(it, durationToast, Toast.LENGTH_LONG).show()
-            }
-        }
+//        // This part was commented
+//        homeBinding.checkInBtn.setOnClickListener {
+//            println("checkInBtn1")
+//
+//            println("Q start")
+//            locationChecker(getLocation())
+//            println("Q end")
+////            requestLocationUpdates()
+//            println("checkInBtn2")
+//
+//        }
+//
+//        homeBinding.checkOutBtn.setOnClickListener {
+//            checkOutTime = System.currentTimeMillis()
+//            val duration = checkOutTime - checkInTime
+//            println("duration : $duration")
+//            val totalSeconds = duration / 1000
+//            val hours = totalSeconds / 3600
+//            val minutes = (totalSeconds % 3600) / 60
+//            val seconds = totalSeconds % 60
+//
+//            println("Hours $hours and Minutes $minutes Seconds $seconds" )
+//            val durationToast = "Hours $hours and Minutes $minutes Seconds $seconds"
+//            // Display the duration to the user if needed
+////            insertWorkRecord(WorkRecord(checkInTime, checkOutTime, duration))
+//            context?.let {
+//                Toast.makeText(it, durationToast, Toast.LENGTH_LONG).show()
+//            }
+//        }
 
         println("onViewCreated3")
     }

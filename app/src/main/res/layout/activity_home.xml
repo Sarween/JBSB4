@@ -6,49 +6,150 @@
     android:layout_height="match_parent"
     tools:context=".Home">
 
-    <Button
-        android:id="@+id/checkInBtn45"
-        android:layout_width="500px"
-        android:layout_height="60dp"
-        android:layout_below="@id/longitude"
-        android:layout_centerInParent="true"
-        android:backgroundTint="#4CAF50"
-        android:text="Check in"
-        android:textSize="50px"
-        android:layout_marginTop="42dp"
-        android:textStyle="bold" />
-
-    <Button
-        android:id="@+id/getShift"
-        android:layout_width="500px"
-        android:layout_height="60dp"
-        android:layout_below="@id/checkInBtn45"
-        android:layout_centerInParent="true"
-        android:backgroundTint="#4CAF50"
-        android:text="Get Shift"
-        android:textSize="50px"
-        android:layout_marginTop="42dp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/latitude"
+    <!-- Header -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="Latitude"
-        android:layout_marginTop="42dp"
-        android:textColor="@color/black"
-        android:textSize="24sp" />
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/headerAttendance"
+        android:background="@color/my_secondary"
+        >
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:id="@+id/back"
+            android:src="@drawable/ic_back_foreground"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"/>
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="10dp">
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/profile_image"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@drawable/jbsb"
+                app:civ_border_width="2dp"
+                app:civ_border_color="#FF000000"/>
+        </FrameLayout>
 
-    <TextView
-        android:id="@+id/longitude"
+        <TextView
+            android:id="@+id/app_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+
+            android:fontFamily="@font/poppins_semibold"
+            android:text="Attendance"
+            android:textColor="@color/my_primary"
+            android:textSize="24sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:layout_marginTop="42dp"
-        android:text="Longitude"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:layout_below="@id/latitude" />
+        android:orientation="vertical"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/holder"
+        android:layout_below="@id/headerAttendance"
+        >
+
+        <TextView
+            android:id="@+id/no_shifts_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You have 0 shifts left"
+            android:textSize="18sp"
+            android:textColor="@color/my_primary"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+             />
+
+<!--        <Button-->
+<!--            android:id="@+id/checkInBtn45"-->
+<!--            android:layout_width="340px"-->
+<!--            android:layout_height="59dp"-->
+<!--            android:layout_below="@id/longitude"-->
+<!--            android:layout_centerInParent="true"-->
+<!--            android:backgroundTint="#4CAF50"-->
+<!--            android:text="Check in"-->
+<!--            android:textColor="#FFFFFF"-->
+<!--            android:textSize="45px"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_gravity="right"/>-->
+<!--        <TextView-->
+<!--            android:id="@+id/test_message"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="location"-->
+<!--            android:textSize="18sp"-->
+<!--            android:textColor="@color/my_primary"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_gravity="center_horizontal"-->
+<!--            android:layout_marginTop="10dp"/>-->
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView_recruitment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_shifts_message"
+            tools:listitem="@layout/list_shift"/>
+    </LinearLayout>
+
+
+
+<!--    <Button-->
+<!--        android:id="@+id/checkInBtn45"-->
+<!--        android:layout_width="500px"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_below="@id/longitude"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginTop="42dp"-->
+<!--        android:backgroundTint="#4CAF50"-->
+<!--        android:text="Check in"-->
+<!--        android:textSize="50px"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/getShift"-->
+<!--        android:layout_width="500px"-->
+<!--        android:layout_height="60dp"-->
+<!--        android:layout_below="@id/checkInBtn45"-->
+<!--        android:layout_centerInParent="true"-->
+<!--        android:layout_marginTop="42dp"-->
+<!--        android:backgroundTint="#4CAF50"-->
+<!--        android:text="Get Shift"-->
+<!--        android:textSize="50px"-->
+<!--        android:textStyle="bold" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/latitude"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:text="Latitude"-->
+<!--        android:layout_marginTop="42dp"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="24sp" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/longitude"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="42dp"-->
+<!--        android:text="Longitude"-->
+<!--        android:textColor="@color/black"-->
+<!--        android:textSize="24sp"-->
+<!--        android:layout_below="@id/latitude" />-->
 
 </RelativeLayout>
