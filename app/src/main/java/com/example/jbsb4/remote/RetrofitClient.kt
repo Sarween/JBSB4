@@ -11,7 +11,7 @@ import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 //import retrofit2.converter.scalars.ScalarsConverterFactory
 
 object RetrofitClient {
-    val baseUrl = "http://10.0.2.2:5012/"
+    val baseUrl = "http://10.0.2.2:5045/"
     val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
 //        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())

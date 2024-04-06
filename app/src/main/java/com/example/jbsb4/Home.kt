@@ -102,7 +102,7 @@ class Home : AppCompatActivity() {
 
         // Stopped here
         // Replace this with your actual API response
-        val recruitmentData = shiftApi.getStudentShift(PreferenceHelper.ID_KEY)
+        val recruitmentData = shiftApi.getAssignmentsByStudentID(PreferenceHelper.ID_KEY)
 
         recruitmentData.enqueue(object : Callback<List<Recruitment>?> {
             override fun onResponse(

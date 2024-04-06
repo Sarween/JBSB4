@@ -13,6 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jbsb4.Model.Assignment
 import com.example.jbsb4.Model.Recruitment
 import com.example.jbsb4.Model.Shift
 import com.example.jbsb4.R
@@ -41,6 +42,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
         var endTime: TextView
         //        private val endTime: TextView = itemView.findViewById(R.id.timeTextView)
         var location: TextView
+        var cancelBtn: Button
         var checkInbtn: Button
         var checkOutbtn: Button
 
@@ -51,6 +53,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
             startTime = itemView.findViewById(R.id.checkIn)
             endTime = itemView.findViewById(R.id.checkOut)
             location = itemView.findViewById(R.id.location)
+            cancelBtn = itemView.findViewById(R.id.cancelBtn)
             checkInbtn = itemView.findViewById(R.id.checkInBtn)
             checkOutbtn = itemView.findViewById(R.id.checkOutBtn)
 
@@ -71,6 +74,29 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
         val id = recruitmentList[position].recruitmentID.toString()
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+
+        holder.cancelBtn.setOnClickListener{
+            val api = RetrofitClient.getInstance().create(APIInterface::class.java)
+
+            val cancelResponse = api.cancelRequest(
+                PreferenceHelper.ID_KEY,
+                recruitmentList[position].recruitmentID,
+            )
+
+            cancelResponse.enqueue(object : Callback<Assignment>{
+                override fun onResponse(call: Call<Assignment>, response: Response<Assignment>) {
+                    println("Cancel request submitted")
+                    Toast.makeText(context, "Job cancellation request is submitted.", Toast.LENGTH_LONG).show()
+                }
+
+                override fun onFailure(call: Call<Assignment>, t: Throwable) {
+                    println("Failed")
+                    Toast.makeText(context, "Job cancellation request is submitted.", Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+
+
         // Check in button
         holder.checkInbtn.setOnClickListener {
             println("a")

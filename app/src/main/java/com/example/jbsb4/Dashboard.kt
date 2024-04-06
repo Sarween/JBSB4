@@ -44,31 +44,31 @@ class Dashboard : AppCompatActivity() {
         // Creating API
         val api = RetrofitClient.getInstance().create(APIInterface::class.java)
 
-        val data = api.getHoursWorked(PreferenceHelper.ID_KEY)
-        var currentProgress = 0;
-        data.enqueue(object : Callback<List<Double>> {
-            override fun onResponse(
-                call: Call<List<Double>>,
-                response: Response<List<Double>>
-            ) {
-                val responseBody = response.body()!!
-                currentProgress = responseBody.get(0).toInt()
-                ObjectAnimator.ofInt(progressBar,"progress", currentProgress).setDuration(1000).start()
-                val rTime = (max-currentProgress).toDouble()/60
-                val remainingTime: Int = ceil(rTime).toInt()
-                timeLeft.text = remainingTime.toString() + " hours left to go!"
-                val progressPercentage: Int = (currentProgress.toFloat() / max.toFloat() * 100).toInt()
-                progressPercent.text = progressPercentage.toString() + "%"
-
-                aveRating.text = responseBody.get(1).toString()
-                totalEarning.text = "RM " + responseBody.get(2).toString()
-
-            }
-            override fun onFailure(call: Call<List<Double>>, t: Throwable) {
-                println("shit")
-                Log.d("MainActivity", "onFailure "+t.message)
-            }
-        })
+//        val data = api.getHoursWorked(PreferenceHelper.ID_KEY)
+//        var currentProgress = 0;
+//        data.enqueue(object : Callback<List<Double>> {
+//            override fun onResponse(
+//                call: Call<List<Double>>,
+//                response: Response<List<Double>>
+//            ) {
+//                val responseBody = response.body()!!
+//                currentProgress = responseBody.get(0).toInt()
+//                ObjectAnimator.ofInt(progressBar,"progress", currentProgress).setDuration(1000).start()
+//                val rTime = (max-currentProgress).toDouble()/60
+//                val remainingTime: Int = ceil(rTime).toInt()
+//                timeLeft.text = remainingTime.toString() + " hours left to go!"
+//                val progressPercentage: Int = (currentProgress.toFloat() / max.toFloat() * 100).toInt()
+//                progressPercent.text = progressPercentage.toString() + "%"
+//
+//                aveRating.text = responseBody.get(1).toString()
+//                totalEarning.text = "RM " + responseBody.get(2).toString()
+//
+//            }
+//            override fun onFailure(call: Call<List<Double>>, t: Throwable) {
+//                println("shit")
+//                Log.d("MainActivity", "onFailure "+t.message)
+//            }
+//        })
 
 
 
@@ -82,21 +82,21 @@ class Dashboard : AppCompatActivity() {
         val worksheetBtn: CardView = findViewById(R.id.jobCard2)
 
         worksheetBtn.setOnClickListener() {
-            val intent = Intent(this, Worksheet::class.java)
+            val intent = Intent(this, AvailabilityList::class.java)
             startActivity(intent)
         }
 
-        val performanceBtn: CardView = findViewById(R.id.jobCard4)
+        val recruitmentBtn: CardView = findViewById(R.id.jobCard4)
 
-        performanceBtn.setOnClickListener() {
-            val intent = Intent(this, Performance::class.java)
+        recruitmentBtn.setOnClickListener() {
+            val intent = Intent(this, activity_recruitments::class.java)
             startActivity(intent)
         }
 
         val leaderboardBtn: CardView = findViewById(R.id.jobCard3)
 
         leaderboardBtn.setOnClickListener() {
-            val intent = Intent(this, Leaderboard::class.java)
+            val intent = Intent(this, assignments::class.java)
             startActivity(intent)
         }
 

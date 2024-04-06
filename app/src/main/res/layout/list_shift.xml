@@ -141,9 +141,21 @@
                 app:layout_constraintBottom_toBottomOf="parent">
 
                 <Button
+                    android:id="@+id/cancelBtn"
+                    android:layout_width="340px"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:backgroundTint="#F44336"
+                    android:text="Cancel"
+                    android:textColor="#FFFFFF"
+                    android:textSize="45px"
+                    android:textStyle="bold"
+                    android:layout_gravity="right"/>
+
+                <Button
                     android:id="@+id/checkInBtn"
                     android:layout_width="340px"
-                    android:layout_height="59dp"
+                    android:layout_height="50dp"
                     android:layout_below="@id/longitude"
                     android:layout_centerInParent="true"
                     android:backgroundTint="#4CAF50"
@@ -156,10 +168,10 @@
                 <Button
                     android:id="@+id/checkOutBtn"
                     android:layout_width="340px"
-                    android:layout_height="60dp"
+                    android:layout_height="50dp"
                     android:layout_below="@id/checkInBtn"
                     android:layout_centerInParent="true"
-                    android:backgroundTint="#F44336"
+                    android:backgroundTint="#FF9800"
                     android:textColor="#FFFFFF"
                     android:text="Check Out"
                     android:textSize="45px"
