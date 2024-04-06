@@ -4,7 +4,8 @@ import android.content.SharedPreferences
 
 object PreferenceHelper {
     private const val PREFS_NAME = "MyPrefs"
-    const val ID_KEY = 1
+//    const val ID_KEY = 1
+    var ID_KEY: Int = 1
 
     fun saveID(context: Context, id: Int) {
         val sharedPreferences: SharedPreferences = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

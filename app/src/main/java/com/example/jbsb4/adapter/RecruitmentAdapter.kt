@@ -1,26 +1,43 @@
 package com.example.jbsb4.adapter
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.location.Location
+import android.location.LocationManager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.example.jbsb4.Home
 import com.example.jbsb4.Model.Recruitment
 import com.example.jbsb4.Model.Shift
+import com.example.jbsb4.Performance
 import com.example.jbsb4.R
 import com.example.jbsb4.helpers.PreferenceHelper
 import com.example.jbsb4.remote.APIInterface
 import com.example.jbsb4.remote.RetrofitClient
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.Priority
+import com.google.android.gms.tasks.CancellationTokenSource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +52,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
     // Update the constructor to accept Response<List<Shift>> type
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     class RecruitmentViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var shiftDate: TextView
         var startTime: TextView
@@ -62,6 +80,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
         return RecruitmentViewHolder(itemView)
     }
 
+
     override fun onBindViewHolder(holder: RecruitmentViewHolder, position: Int) {
 
         holder.shiftDate.text = formatDate(recruitmentList[position].jobShiftDate.toString())
@@ -70,7 +89,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
         holder.location.text = recruitmentList[position].jobLocation.toString()
         val id = recruitmentList[position].recruitmentID.toString()
 
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+//        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
         // Check in button
         holder.checkInbtn.setOnClickListener {
             println("a")
@@ -89,67 +108,250 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
                 )
             } else {
                 println("b")
-                // Get the user's location.
-                println(fusedLocationClient.lastLocation.toString())
-                fusedLocationClient.getLastLocation()
-                    .addOnSuccessListener { location ->
-                        // If the location is not null, display it in a text view.
-                        if (location != null) {
-                            println(location.latitude)
-                            println(location.longitude)
+                fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity)
+//                val result = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_BALANCED_POWER_ACCURACY, CancellationTokenSource().token)
+//                result.addOnCompleteListener{
+//                    println("Testing: " + it.result.latitude)
+//                    println("Testing2: " + it.result.longitude)
+//                }
+                val locationRequest = LocationRequest.create().apply {
+//                    interval = 10000 // Update interval in milliseconds
+//                    fastestInterval = 5000 // Fastest update interval in milliseconds
+                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                }
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    object : LocationCallback() {
+                        override fun onLocationResult(locationResult: LocationResult) {
+                            val location = locationResult.lastLocation
+                            if (location != null) {
+                                val latitude = location.latitude
+                                val longitude = location.longitude
+                                println(location.latitude)
+                                println(location.longitude)
+                                // Perform check in
+                                // Check in function
+                                val shiftApi =
+                                    RetrofitClient.getInstance().create(APIInterface::class.java)
 
-                            // Check in function
-                            val shiftApi =
-                                RetrofitClient.getInstance().create(APIInterface::class.java)
+                                // Calling check in api
+                                val checkInResponse = shiftApi.checkIn(
+                                    recruitmentList[position].recruitmentID,
+                                    PreferenceHelper.ID_KEY,
+                                    location.latitude,
+                                    location.longitude
+                                )
 
-                            // Calling check in api
-                            val checkInResponse = shiftApi.checkIn(
-                                recruitmentList[position].recruitmentID,
-                                PreferenceHelper.ID_KEY,
-                                location.latitude,
-                                location.longitude
-                            )
+                                checkInResponse.enqueue(object : Callback<Shift> {
+                                    override fun onResponse(
+                                        call: Call<Shift>,
+                                        response: Response<Shift>
+                                    ) {
+                                        if (response.isSuccessful) {
+                                            val checkInResponse = response.body()
 
-                            checkInResponse.enqueue(object : Callback<Shift> {
-                                override fun onResponse(
-                                    call: Call<Shift>,
-                                    response: Response<Shift>
-                                ) {
-                                    if (response.isSuccessful) {
-                                        val checkInResponse = response.body()
+                                            if (checkInResponse != null) {
+                                                val x = placeTimeFromString(checkInResponse.checkInTime)
+                                                Toast.makeText(activity, "Checked in at $x", Toast.LENGTH_LONG).show()
 
-                                        if (checkInResponse != null) {
-                                            val x = placeTimeFromString(checkInResponse.checkInTime)
-                                            Toast.makeText(activity, "Checked in at $x", Toast.LENGTH_LONG).show()
-
+                                            }
                                         }
+                                        else {
+                                            val errorBody = response.errorBody()?.string()
+                                            // Parse the error body to get the error message
+                                            val errorMessage = errorBody ?: "Unknown error"
+                                            // Display or log the error message
+                                            println(errorMessage)
+
+                                            Toast.makeText(activity, "$errorMessage", Toast.LENGTH_SHORT).show()
+                                        }
+
+
                                     }
-                                    else {
-                                        val errorBody = response.errorBody()?.string()
-                                        // Parse the error body to get the error message
-                                        val errorMessage = errorBody ?: "Unknown error"
-                                        // Display or log the error message
-                                        println(errorMessage)
 
-                                        Toast.makeText(activity, "$errorMessage", Toast.LENGTH_SHORT).show()
+                                    override fun onFailure(call: Call<Shift>, t: Throwable) {
+                                        Log.d("MainActivity", "onFailure " + t.message)
+                                    }
+                                })
+                                // Use latitude and longitude as needed
+                                Log.d("Location", "Latitude: $latitude, Longitude: $longitude")
+                            } else {
+                                Log.e("Location", "New location is null")
+                                ///////////////////////////////////////////////////////////////////
+                                println("no location detected using preset setting")
+                                val presetLatitude = 2.987
+                                val presetLongitude = 101.503
+
+
+                                // Copied part
+                                // Check in function
+                                val shiftApi =
+                                    RetrofitClient.getInstance().create(APIInterface::class.java)
+
+                                // Calling check in api
+                                val checkInResponse = shiftApi.checkIn(
+                                    recruitmentList[position].recruitmentID,
+                                    PreferenceHelper.ID_KEY,
+                                    presetLatitude,
+                                    presetLongitude
+                                )
+
+                                checkInResponse.enqueue(object : Callback<Shift> {
+                                    override fun onResponse(
+                                        call: Call<Shift>,
+                                        response: Response<Shift>
+                                    ) {
+                                        if (response.isSuccessful) {
+                                            val checkInResponse = response.body()
+
+                                            if (checkInResponse != null) {
+                                                val x = placeTimeFromString(checkInResponse.checkInTime)
+//                                            println(checkInResponse.checkInTime)
+                                                Toast.makeText(activity, "Checked in at $x", Toast.LENGTH_LONG).show()
+
+                                            }
+                                        }
+                                        else {
+                                            val errorBody = response.errorBody()?.string()
+                                            // Parse the error body to get the error message
+                                            val errorMessage = errorBody ?: "Unknown error"
+                                            // Display or log the error message
+                                            println(errorMessage)
+
+                                            Toast.makeText(activity, "$errorMessage", Toast.LENGTH_SHORT).show()
+                                        }
+
+
                                     }
 
+                                    override fun onFailure(call: Call<Shift>, t: Throwable) {
+                                        Log.d("MainActivity", "onFailure " + t.message)
+                                    }
+                                })
 
-                                }
+//                            Toast.makeText(activity, "Check internet connection", Toast.LENGTH_SHORT).show()
+//                            println("no location")
 
-                                override fun onFailure(call: Call<Shift>, t: Throwable) {
-                                    Log.d("MainActivity", "onFailure " + t.message)
-                                }
-                            })
-
+                            }
                         }
-                        else {
-                            Toast.makeText(activity, "Check internet connection", Toast.LENGTH_SHORT).show()
-                            println("no location")
-                        }
-
-
-                    } // Listener
+                    },
+                    null
+                )
+                // Commented lastlocation
+//                // Get the user's location.
+//                println(fusedLocationClient.lastLocation.toString())
+//
+//                fusedLocationClient.getLastLocation()
+//                    .addOnSuccessListener { location ->
+//                        // If the location is not null, display it in a text view.
+//                        if (location != null) {
+//                            println(location.latitude)
+//                            println(location.longitude)
+//
+//                            // Check in function
+//                            val shiftApi =
+//                                RetrofitClient.getInstance().create(APIInterface::class.java)
+//
+//                            // Calling check in api
+//                            val checkInResponse = shiftApi.checkIn(
+//                                recruitmentList[position].recruitmentID,
+//                                PreferenceHelper.ID_KEY,
+//                                location.latitude,
+//                                location.longitude
+//                            )
+//
+//                            checkInResponse.enqueue(object : Callback<Shift> {
+//                                override fun onResponse(
+//                                    call: Call<Shift>,
+//                                    response: Response<Shift>
+//                                ) {
+//                                    if (response.isSuccessful) {
+//                                        val checkInResponse = response.body()
+//
+//                                        if (checkInResponse != null) {
+//                                            val x = placeTimeFromString(checkInResponse.checkInTime)
+//                                            Toast.makeText(activity, "Checked in at $x", Toast.LENGTH_LONG).show()
+//
+//                                        }
+//                                    }
+//                                    else {
+//                                        val errorBody = response.errorBody()?.string()
+//                                        // Parse the error body to get the error message
+//                                        val errorMessage = errorBody ?: "Unknown error"
+//                                        // Display or log the error message
+//                                        println(errorMessage)
+//
+//                                        Toast.makeText(activity, "$errorMessage", Toast.LENGTH_SHORT).show()
+//                                    }
+//
+//
+//                                }
+//
+//                                override fun onFailure(call: Call<Shift>, t: Throwable) {
+//                                    Log.d("MainActivity", "onFailure " + t.message)
+//                                }
+//                            })
+//
+//                        }
+//                        else {
+//                            ///////////////////////////////////////////////////////////////////
+//                            println("no location detected using preset setting")
+//                            val presetLatitude = 2.987
+//                            val presetLongitude = 101.503
+//
+//
+//                            // Copied part
+//                            // Check in function
+//                            val shiftApi =
+//                                RetrofitClient.getInstance().create(APIInterface::class.java)
+//
+//                            // Calling check in api
+//                            val checkInResponse = shiftApi.checkIn(
+//                                recruitmentList[position].recruitmentID,
+//                                PreferenceHelper.ID_KEY,
+//                                presetLatitude,
+//                                presetLongitude
+//                            )
+//
+//                            checkInResponse.enqueue(object : Callback<Shift> {
+//                                override fun onResponse(
+//                                    call: Call<Shift>,
+//                                    response: Response<Shift>
+//                                ) {
+//                                    if (response.isSuccessful) {
+//                                        val checkInResponse = response.body()
+//
+//                                        if (checkInResponse != null) {
+//                                            val x = placeTimeFromString(checkInResponse.checkInTime)
+////                                            println(checkInResponse.checkInTime)
+//                                            Toast.makeText(activity, "Checked in at $x", Toast.LENGTH_LONG).show()
+//
+//                                        }
+//                                    }
+//                                    else {
+//                                        val errorBody = response.errorBody()?.string()
+//                                        // Parse the error body to get the error message
+//                                        val errorMessage = errorBody ?: "Unknown error"
+//                                        // Display or log the error message
+//                                        println(errorMessage)
+//
+//                                        Toast.makeText(activity, "$errorMessage", Toast.LENGTH_SHORT).show()
+//                                    }
+//
+//
+//                                }
+//
+//                                override fun onFailure(call: Call<Shift>, t: Throwable) {
+//                                    Log.d("MainActivity", "onFailure " + t.message)
+//                                }
+//                            })
+//
+////                            Toast.makeText(activity, "Check internet connection", Toast.LENGTH_SHORT).show()
+////                            println("no location")
+//                        }
+//
+////////////////////////////////////////////////////////////////////////////////////////////////
+//                    } // Listener
             }
         }
 
@@ -174,7 +376,9 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
 
                         if (checkOutResponse != null) {
                             val x = placeTimeFromString(checkOutResponse.checkOutTime)
-                            Toast.makeText(activity, "Checked out at $x", Toast.LENGTH_SHORT).show()
+//                            println(checkOutResponse.checkOutTime)
+                            showCustomDialog(x,activity, position)
+//                            Toast.makeText(activity, "Checked out at $x", Toast.LENGTH_SHORT).show()
                         }
                     }
                     else {
@@ -201,6 +405,55 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
 
     }
 
+    private fun showCustomDialog(message:String?, context: Context, position: Int) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_dialog)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val tvMessage: TextView = dialog.findViewById(R.id.checkOutTime)
+        val btnComment: Button = dialog.findViewById(R.id.btnComment)
+        val editText: EditText = dialog.findViewById(R.id.editText)
+
+        tvMessage.text = "You checked out at $message"
+
+        btnComment.setOnClickListener {
+
+            val api = RetrofitClient.getInstance().create(APIInterface::class.java)
+            val userText = editText.text.toString()
+            println(userText)
+
+            // Calling check in api
+            val comment = api.comment(
+                recruitmentList[position].recruitmentID,
+                PreferenceHelper.ID_KEY,
+                userText
+            )
+
+            comment.enqueue(object : Callback<Shift> {
+                override fun onResponse(call: Call<Shift>, response: Response<Shift>) {
+                    Toast.makeText(context, "Commented", Toast.LENGTH_LONG).show()
+                    val intent = Intent(context, Home::class.java)
+                    context.startActivity(intent)
+
+                }
+
+                override fun onFailure(call: Call<Shift>, t: Throwable) {
+                    Toast.makeText(context, "Failed", Toast.LENGTH_LONG).show()
+                }
+
+
+            })
+
+            dialog.dismiss()
+
+        }
+
+        dialog.show()
+
+    }
+
 
     override fun getItemCount(): Int {
         return recruitmentList.size
@@ -208,6 +461,7 @@ class RecruitmentAdapter(val context: Context, val recruitmentList: List<Recruit
 
     fun placeTimeFromString(dateTimeString: String): String {
         val formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME // Using ISO-8601 format for parsing
+//        val formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME
         val offsetDateTime = OffsetDateTime.parse(dateTimeString, formatter)
 
         val time = offsetDateTime.toLocalTime() // Extract the time part

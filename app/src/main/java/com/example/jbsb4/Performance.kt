@@ -1,11 +1,12 @@
 package com.example.jbsb4
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.jbsb4.helpers.PreferenceHelper
 import com.example.jbsb4.remote.APIInterface
 import com.example.jbsb4.remote.RetrofitClient
@@ -15,6 +16,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import retrofit2.Call
@@ -112,6 +114,16 @@ class Performance : AppCompatActivity() {
         setChart(departmentNames)
     }
 
+//    private fun getHoursValueForIndex(index: Int): Any {
+//        // Replace with your actual data structure for hours
+//        val hoursData = profitValues  // Example hours data
+//
+//        return if (index in hoursData.indices) {
+//            hoursData[index]
+//        } else {
+//            0f  // Return a default value if the index is out of bounds
+//        }
+//    }
     private fun setChart(departmentNames: ArrayList<String>) {
         chart.description.isEnabled = false
         chart.setMaxVisibleValueCount(25)
@@ -119,21 +131,39 @@ class Performance : AppCompatActivity() {
         chart.setDrawBarShadow(false)
         chart.setDrawBarShadow(false)
 
+        val yAxis = chart.axisLeft
+        yAxis.axisLineColor = Color.BLACK
+        yAxis.labelCount = 10
+
+
         val xAxis = chart.xAxis
 //arrayListOf("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sept", "Oct", "Nov", "Dec")
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         xAxis.setDrawGridLines(false)
         xAxis.granularity = 1f
         xAxis.valueFormatter = IndexAxisValueFormatter(departmentNames)
+        xAxis.isGranularityEnabled;
+
 
         chart.axisLeft.setDrawGridLines(false)
         chart.legend.isEnabled = false
+        chart.setDrawValueAboveBar(true)
+
+        val valueFormatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return value.toString()
+            }
+        }
 
         val barDataSetter: BarDataSet
 
         if(chart.data != null && chart.data.dataSetCount > 0) {
             barDataSetter = chart.data.getDataSetByIndex(0) as BarDataSet
             barDataSetter.values = profitValues
+
+            barDataSetter.valueFormatter = valueFormatter
+//            barDataSetter.valueTextSize = 12f
+//            barDataSetter.valueTextColor = Color.BLACK
             chart.data.notifyDataChanged()
             chart.notifyDataSetChanged()
         }
@@ -166,4 +196,6 @@ class Performance : AppCompatActivity() {
 
         return String.format("%02d hr %02d mins", hours, minutes)
     }
+
+
 }

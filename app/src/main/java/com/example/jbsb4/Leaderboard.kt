@@ -1,13 +1,21 @@
 package com.example.jbsb4
 
 import android.app.DatePickerDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.jbsb4.Model.JBSBWorksheet
@@ -28,7 +36,7 @@ class Leaderboard : AppCompatActivity() {
 
     private lateinit var tvDatePicker: TextView
     private lateinit var btnDatePicker: Button
-    private lateinit var recyclerView: RecyclerView
+    private lateinit var leaderView: RecyclerView
     lateinit var myAdapter: LeaderboardAdapter
     lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -48,7 +56,8 @@ class Leaderboard : AppCompatActivity() {
         }
 
         // Access recycler view using synthetic binding
-        val leaderView :RecyclerView  = findViewById(R.id.recyclerView_leaderboard)
+//        val leaderView :RecyclerView  = findViewById(R.id.recyclerView_leaderboard)
+        leaderView = findViewById(R.id.recyclerView_leaderboard)
         leaderView.setHasFixedSize(true)
         linearLayoutManager = LinearLayoutManager(this)
         leaderView.layoutManager = linearLayoutManager
@@ -72,14 +81,20 @@ class Leaderboard : AppCompatActivity() {
             ) {
                 val responseBody = response.body()!!
 
-                // Calling Adapter
-                myAdapter = LeaderboardAdapter(baseContext, responseBody, this@Leaderboard)
-                myAdapter.notifyDataSetChanged()
-                leaderView.adapter = myAdapter
+                if (responseBody != null) {
+                    // Calling Adapter
+                    myAdapter = LeaderboardAdapter(baseContext, responseBody, this@Leaderboard)
+                    myAdapter.notifyDataSetChanged()
+                    leaderView.adapter = myAdapter
+                }
+                else {
+                    Toast.makeText(this@Leaderboard, "No student participated", Toast.LENGTH_LONG).show()
+                }
+
 
             }
             override fun onFailure(call: Call<List<LeaderboardItem>>, t: Throwable) {
-                Log.d("MainActivity", "onFailure "+t.message)
+                Toast.makeText(this@Leaderboard, "No student participated", Toast.LENGTH_LONG).show()
             }
         })
 
@@ -113,15 +128,25 @@ class Leaderboard : AppCompatActivity() {
                 response: Response<List<LeaderboardItem>>
             ) {
                 val responseBody = response.body()!!
-                // Calling Adapter
-                myAdapter = LeaderboardAdapter(baseContext, responseBody, this@Leaderboard)
-                myAdapter.notifyDataSetChanged()
-                leaderboardView.adapter = myAdapter
+
+                if (responseBody != null) {
+                    leaderboardView.visibility = View.VISIBLE
+                    // Calling Adapter
+                    myAdapter = LeaderboardAdapter(baseContext, responseBody, this@Leaderboard)
+                    myAdapter.notifyDataSetChanged()
+                    leaderboardView.adapter = myAdapter
+                } else {
+
+                    showNoDataDialog(this@Leaderboard)
+//                    Toast.makeText(this@Leaderboard, "No student participated", Toast.LENGTH_LONG).show()
+                }
+
 
             }
 
             override fun onFailure(call: Call<List<LeaderboardItem>>, t: Throwable) {
-                Log.d("MainActivity", "onFailure " + t.message)
+                showNoDataDialog(this@Leaderboard)
+//                Toast.makeText(this@Leaderboard, "No student participated", Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -131,6 +156,24 @@ class Leaderboard : AppCompatActivity() {
         val sdf = SimpleDateFormat(myFormat, Locale.UK)
         tvDatePicker.setText(sdf.format(myCalendar.time))
 
+    }
+
+    private fun showNoDataDialog(context: Context) {
+
+        val dialog = Dialog(context) // Use 'this' for Activity or 'requireContext()' for Fragment
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.dialog_empty) // Create a layout for your custom dialog
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val btnOk: Button = dialog.findViewById(R.id.btnOk)
+        btnOk.setOnClickListener {
+            dialog.dismiss()
+            val intent = Intent(this, Leaderboard::class.java)
+            startActivity(intent)
+        }
+
+        dialog.show()
     }
 
 //    private fun fetchDataForRecyclerView(month: Int, year: Int, worksheetView :RecyclerView) {

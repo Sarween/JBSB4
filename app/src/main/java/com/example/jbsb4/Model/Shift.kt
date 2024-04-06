@@ -13,10 +13,10 @@ data class Shift(
     val checkOutTime: String,
     val isLate: Boolean,
     val isOvertime: Boolean,
-    val studentComment: String,
     val staffReview: String,
     val rating: Int,
-    val isAuthorized: Boolean
+    val isAuthorized: Boolean,
+    val studentComment: String
 )
 
 

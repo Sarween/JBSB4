@@ -1,9 +1,13 @@
 package com.example.jbsb4
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
+import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -14,6 +18,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -52,7 +57,6 @@ class Home : AppCompatActivity() {
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     // Get the button that you want to use to trigger the location request.
-
 
     override fun onStop() {
         compositeDisposable.clear()

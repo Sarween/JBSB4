@@ -65,7 +65,6 @@ class Dashboard : AppCompatActivity() {
 
             }
             override fun onFailure(call: Call<List<Double>>, t: Throwable) {
-                println("shit")
                 Log.d("MainActivity", "onFailure "+t.message)
             }
         })

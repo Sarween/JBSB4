@@ -52,7 +52,7 @@ class WorksheetAdapter(val context: Context, val worksheetList: List<WorksheetIt
         var supervisor: TextView
         var pending: ImageView
         var approve: ImageView
-        var supervisorReview: LinearLayout
+        var supervisorRating: RatingBar
 
         init {
             shiftDate = itemView.findViewById(R.id.text_shift_title)
@@ -69,7 +69,7 @@ class WorksheetAdapter(val context: Context, val worksheetList: List<WorksheetIt
             supervisor = itemView.findViewById(R.id.picText)
             pending = itemView.findViewById(R.id.pending)
             approve = itemView.findViewById(R.id.approve)
-            supervisorReview = itemView.findViewById(R.id.supervisorReview)
+            supervisorRating = itemView.findViewById(R.id.rating_bar)
         }
 
     }
@@ -89,7 +89,12 @@ class WorksheetAdapter(val context: Context, val worksheetList: List<WorksheetIt
         holder.wage.text = "RM " + worksheetList[position].shiftsWage.toString()
         holder.location.text = worksheetList[position].jobLocation
         holder.rating.rating = worksheetList[position].rating.toFloat()
-        holder.comment.text = worksheetList[position].staffReview
+        if (worksheetList[position].jobVerification) {
+            holder.comment.text =  "Student: " + worksheetList[position].studentComment + "\n" + "Supervisor: " + worksheetList[position].staffReview
+        }
+        else {
+            holder.comment.text =  "Student: " + worksheetList[position].studentComment
+        }
         holder.supervisor.text = worksheetList[position].jobPIC
 
         if (worksheetList[position].isLate) {
@@ -109,12 +114,12 @@ class WorksheetAdapter(val context: Context, val worksheetList: List<WorksheetIt
         if (worksheetList[position].jobVerification) {
             holder.approve.visibility = View.VISIBLE
             holder.pending.visibility = View.GONE
-            holder.supervisorReview.visibility = View.VISIBLE
+            holder.supervisorRating.visibility = View.VISIBLE
         }
         else {
             holder.pending.visibility = View.VISIBLE
             holder.approve.visibility = View.GONE
-            holder.supervisorReview.visibility = View.GONE
+            holder.supervisorRating.visibility = View.GONE
         }
 
     }

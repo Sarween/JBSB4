@@ -12,5 +12,6 @@ data class WorksheetItem(
     val shiftDuration: Int,
     val shiftdates: String,
     val shiftsWage: Double,
-    val staffReview: String
+    val staffReview: String,
+    val studentComment: String
 )

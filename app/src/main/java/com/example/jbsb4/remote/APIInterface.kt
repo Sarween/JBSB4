@@ -9,6 +9,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Query
 import retrofit2.http.Streaming
@@ -16,6 +17,9 @@ import retrofit2.http.Streaming
 interface APIInterface {
 //    @GET("api/Shift")
 //    fun getShift() : Call<List<Shift>>
+    @POST("api/Student/login")
+    fun login(@Query("stuID") stuID: Int, @Query("password") password: String) : Call<ResponseBody>
+
     @GET("api/Shift")
     suspend fun getShift() : Response<List<Shift>>
 
@@ -40,4 +44,7 @@ interface APIInterface {
 
     @GET("api/Worksheet/OverallHours")
     fun getOverallHours(@Query("studentId") studentId: Int) : Call<Map<String, Int>>
+    @PUT("api/Shift/Comment")
+    fun comment(@Query("recruitmentId") recruitmentId: Int, @Query("studentId") studentId: Int, @Query("comment") comment: String) : Call<Shift>
+
 }

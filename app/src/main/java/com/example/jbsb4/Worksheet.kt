@@ -28,7 +28,7 @@ import com.google.android.gms.location.FusedLocationProviderClient
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import com.github.barteksc.pdfviewer.PDFView
+//import com.github.barteksc.pdfviewer.PDFView
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -90,14 +90,33 @@ class Worksheet : AppCompatActivity(){
             ) {
                 val responseBody = response.body()!!
 
-                // Calling Adapter
-                myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
-                myAdapter.notifyDataSetChanged()
-                worksheetView.adapter = myAdapter
+//                if (responseBody != null) {
+//                    // Calling Adapter
+//                    myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
+//                    myAdapter.notifyDataSetChanged()
+//                    worksheetView.adapter = myAdapter
+//                } else {
+//                    Toast.makeText(this@Worksheet, "No shifts completed", Toast.LENGTH_LONG).show()
+//                }
+                if (responseBody != null) {
+                    if (responseBody.worksheet.isNotEmpty()) {
+                        // Calling Adapter
+                        myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
+                        myAdapter.notifyDataSetChanged()
+                        worksheetView.adapter = myAdapter
+                    }
+                    else {
+                        Toast.makeText(this@Worksheet, "No shifts completed this month", Toast.LENGTH_LONG).show()
+                    }
+
+                } else {
+                    Toast.makeText(this@Worksheet, "No shifts completed", Toast.LENGTH_LONG).show()
+                }
+
 
             }
             override fun onFailure(call: Call<JBSBWorksheet>, t: Throwable) {
-                Log.d("MainActivity", "onFailure "+t.message)
+                Toast.makeText(this@Worksheet, "No shifts completed", Toast.LENGTH_LONG).show()
             }
         })
 
@@ -126,11 +145,21 @@ class Worksheet : AppCompatActivity(){
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
-                    Toast.makeText(this@Worksheet, "Check email", Toast.LENGTH_SHORT).show()
+                    if (response.isSuccessful) {
+                        Toast.makeText(this@Worksheet, "Check email", Toast.LENGTH_SHORT).show()
+                    }
+                    else if (response.code() == 400) {
+                        // Handle bad request (HTTP 400) error
+                        Toast.makeText(
+                            this@Worksheet,
+                            "No completed shifts this month",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     Log.d("MainActivity", "onFailure "+t.message)
-                    Toast.makeText(this@Worksheet, "Fail to send email", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@Worksheet, "No completed shifts this month", Toast.LENGTH_SHORT).show()
                 }
             })
         }
@@ -152,15 +181,33 @@ class Worksheet : AppCompatActivity(){
                 response: Response<JBSBWorksheet>
             ) {
                 val responseBody = response.body()!!
-                // Calling Adapter
-                myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
-                myAdapter.notifyDataSetChanged()
-                worksheetView.adapter = myAdapter
+//                // Calling Adapter
+//                myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
+//                myAdapter.notifyDataSetChanged()
+//                worksheetView.adapter = myAdapter
+
+                if (responseBody != null) {
+                    if (responseBody.worksheet.isNotEmpty()) {
+                        // Calling Adapter
+                        myAdapter = WorksheetAdapter(baseContext, responseBody.worksheet, this@Worksheet)
+                        myAdapter.notifyDataSetChanged()
+                        worksheetView.adapter = myAdapter
+                    }
+                    else {
+                        println("Worksheet empyt")
+                        Toast.makeText(this@Worksheet, "No shifts completed this month", Toast.LENGTH_LONG).show()
+                    }
+
+                } else {
+                    println("FAILLL")
+                    Toast.makeText(this@Worksheet, "No shifts completed", Toast.LENGTH_LONG).show()
+                }
 
             }
 
             override fun onFailure(call: Call<JBSBWorksheet>, t: Throwable) {
-                Log.d("MainActivity", "onFailure " + t.message)
+                Toast.makeText(this@Worksheet, "No shifts completed", Toast.LENGTH_LONG).show()
+
             }
         })
     }
